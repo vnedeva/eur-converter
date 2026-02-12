@@ -1,480 +1,373 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Currency Converter (EUR/TRY/HUF)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIGI-MTVS 2026 - Trakia University</title>
+    <style>
+        :root {
+            --primary-red: #8b0000;
+            --navy: #002147;
+            --light-gray: #f4f4f4;
+        }
 
-  <!-- Theme -->
-  <meta name="theme-color" content="#0f7a4a">
-  <meta name="apple-mobile-web-app-title" content="EUR↔FX">
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: var(--light-gray);
+        }
 
-  <style>
-    :root{
-      /* Green theme */
-      --bgA:#16a34a;  /* green */
-      --bgB:#0ea5a4;  /* teal */
-      --bgC:#22c55e;  /* bright green */
-      --card:rgba(255,255,255,.92);
+        /* Header with Logo */
+        header {
+            background: #fff;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            border-bottom: 3px solid var(--primary-red);
+        }
 
-      --text:#071a12;
-      --muted:#4b6b5a;
-      --line:rgba(7,26,18,.12);
+        .main-logo {
+            height: 90px;
+        }
 
-      --accent1:#22c55e;
-      --accent2:#0ea5a4;
-      --accent3:#34d399;
+        .header-titles h1 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 1.6rem;
+        }
 
-      --shadow: 0 30px 75px rgba(0,0,0,.22);
-      --radius: 24px;
-      --fieldRadius: 16px;
-      --toggleRadius: 16px;
+        /* Hero Image (University Building) */
+		.hero-banner {
+			width: 100%;
+			height: 400px;
 
-      --focus: 0 0 0 4px rgba(34,197,94,.18);
-    }
+			background: url('TrU_PhotoLibrary_Aerial.jpg');
+			background-size: cover;
+			background-position: center calc(60% + 4cm);
 
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color: var(--text);
+			position: relative;          
+			display: flex;
+			align-items: flex-end;       
+			justify-content: center;
 
-      background:
-        radial-gradient(1100px 650px at 12% 20%, rgba(52, 211, 153, .45), transparent 55%),
-        radial-gradient(900px 600px at 85% 28%, rgba(34, 197, 94, .35), transparent 55%),
-        radial-gradient(900px 600px at 55% 95%, rgba(14, 165, 164, .35), transparent 60%),
-        linear-gradient(135deg, var(--bgA), var(--bgB));
+			padding: 0 20px 28px;        
+			color: white;
+			text-align: center;
+			overflow: hidden;
+		}
 
-      min-height: 100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 26px 14px;
-    }
+		.hero-banner::before {
+			content: "";
+			position: absolute;
+			left: 0; right: 0; bottom: 0;
+			height: 42%;  
+			background: linear-gradient(to top,
+				rgba(0,0,0,0.75) 0%,
+				rgba(0,0,0,0.25) 60%,
+				rgba(0,0,0,0.0) 100%
+			);
+			pointer-events: none;
+		}
 
-    body::before{
-      content:"";
-      position:fixed;
-      inset:-40%;
-      background: conic-gradient(from 180deg, rgba(255,255,255,.08), transparent 35%, rgba(255,255,255,.06), transparent 70%, rgba(255,255,255,.08));
-      filter: blur(24px);
-      animation: spin 18s linear infinite;
-      pointer-events:none;
-      opacity:.5;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+		.hero-text {
+			position: relative;
+			z-index: 1;
+		}
 
-    .card{
-      width: min(760px, 100%);
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 30px 26px 22px;
-      border: 1px solid rgba(255,255,255,.55);
-      backdrop-filter: blur(10px);
-    }
+		.hero-text h1 {
+			margin: 14px 0 0;
+			text-shadow: 2px 2px 4px rgba(0,0,0,0.45);
+		}
 
-    .top{
-      text-align:center;
-      margin-bottom: 18px;
-    }
 
-    .icon{
-      width: 74px;
-      height: 74px;
-      margin: 0 auto 10px;
-      border-radius: 999px;
-      background:
-        radial-gradient(16px 16px at 30% 25%, rgba(255,255,255,.9), transparent 60%),
-        linear-gradient(135deg, var(--accent3), var(--accent2), var(--accent1));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      font-size: 34px;
-      font-weight: 900;
-      user-select:none;
-      box-shadow: 0 14px 32px rgba(0,0,0,.16);
-    }
+        .hero-text h2 {
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
 
-    h1{
-      margin: 6px 0 4px;
-      font-size: clamp(26px, 3.2vw, 38px);
-      letter-spacing: .2px;
-    }
+        .container {
+            max-width: 1150px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    .subtitle{
-      margin: 0;
-      color: var(--muted);
-      font-size: 18px;
-    }
+        /* Leadership Section */
+        .leadership-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
 
-    .label{
-      font-size: 18px;
-      margin: 18px 0 10px;
-      font-weight: 750;
-      letter-spacing: .1px;
-    }
+        .profile-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
 
-    .row{
-      display:grid;
-      grid-template-columns: 1fr auto;
-      gap: 14px;
-      align-items:center;
-    }
+        .profile-img {
+            width: 130px;
+            height: 150px;
+            background: #ddd;
+            margin: 0 auto 15px;
+            object-fit: cover;
+            border-radius: 5px;
+            display: block;
+            border: 1px solid #ccc;
+        }
 
-    .rowOne{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      align-items:center;
-    }
+        /* Table Section */
+        .workshop-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
 
-    input, select{
-      width: 100%;
-      font-size: 32px;
-      padding: 18px 18px;
-      border-radius: var(--fieldRadius);
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.88);
-      outline: none;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
-      font-variant-numeric: tabular-nums;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-    select{
-      font-size: 20px;
-      font-weight: 800;
-      padding-right: 44px;
-      background-image:
-        linear-gradient(45deg, transparent 50%, rgba(7,26,18,.55) 50%),
-        linear-gradient(135deg, rgba(7,26,18,.55) 50%, transparent 50%);
-      background-position:
-        calc(100% - 22px) 50%,
-        calc(100% - 16px) 50%;
-      background-size: 6px 6px, 6px 6px;
-      background-repeat: no-repeat;
-    }
-    input:focus, select:focus{
-      border-color: rgba(34,197,94,.45);
-      box-shadow: var(--focus), inset 0 0 0 1px rgba(255,255,255,.55);
-    }
-    input::placeholder{ color: rgba(75,107,90,.55); }
+        .workshop-table th {
+            background: var(--navy);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
 
-    .select{
-      display:flex;
-      border-radius: var(--toggleRadius);
-      overflow:hidden;
-      border: 1px solid rgba(15,122,74,.25);
-      background: linear-gradient(135deg, rgba(52,211,153,.92), rgba(14,165,164,.90), rgba(34,197,94,.88));
-      padding: 4px;
-      gap: 4px;
-      min-width: 150px;
-      box-shadow: 0 10px 22px rgba(0,0,0,.10);
-    }
-    .select button{
-      flex:1;
-      border: none;
-      border-radius: 12px;
-      padding: 12px 10px;
-      font-size: 18px;
-      font-weight: 900;
-      cursor:pointer;
-      background: transparent;
-      color: rgba(255,255,255,.92);
-    }
-    .select button.active{
-      background: rgba(255,255,255,.95);
-      color: #071a12;
-      box-shadow: 0 8px 18px rgba(0,0,0,.10);
-    }
+        .workshop-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
 
-    .divider{
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(7,26,18,.14), transparent);
-      margin: 22px 0;
-    }
+        .chair-row {
+            background-color: #f1f3f5;
+            font-weight: bold;
+            color: var(--primary-red);
+        }
 
-    .outBox{
-      width: 100%;
-      border-radius: var(--fieldRadius);
-      padding: 18px 18px;
-      font-size: 34px;
-      font-weight: 950;
-      border: 1px solid rgba(7,26,18,.10);
-      background:
-        radial-gradient(18px 18px at 15% 20%, rgba(255,255,255,.95), transparent 60%),
-        rgba(255,255,255,.88);
-      font-variant-numeric: tabular-nums;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.55);
-    }
+        .table-photo {
+            width: 90px;
+            height: 110px;
+            background: #eee;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
 
-    .smallRow{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap: 12px;
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .btnRow{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      justify-content:flex-end;
-      flex-wrap:wrap;
-    }
-    .btn{
-      border: 1px solid rgba(7,26,18,.12);
-      background:
-        radial-gradient(14px 14px at 20% 25%, rgba(255,255,255,.9), transparent 60%),
-        linear-gradient(135deg, rgba(52,211,153,.16), rgba(14,165,164,.12));
-      padding: 10px 12px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-weight: 800;
-      color: rgba(7,26,18,.82);
-      box-shadow: 0 10px 20px rgba(0,0,0,.08);
-      user-select:none;
-      white-space:nowrap;
-    }
+        .links {
+            margin-top: 8px;
+        }
 
-    .rate{
-      text-align:center;
-      margin-top: 16px;
-      color: rgba(75,107,90,.95);
-      font-size: 15px;
-      padding: 10px 12px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.72);
-      border: 1px solid rgba(7,26,18,.10);
-    }
+        .links a {
+            font-size: 0.85rem;
+            color: var(--primary-red);
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-    @media (max-width: 520px){
-      .select{ min-width: 136px; }
-      input{ font-size: 30px; }
-      .outBox{ font-size: 32px; }
-    }
-  </style>
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+
+        .eu-logo {
+            display: block;
+            height: 42px;       /* align with footer text scale */
+            width: auto;
+            max-width: 100%;
+            margin: 16px auto 0;
+        }
+
+        footer {
+            background: var(--navy);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+        }
+    
+
+        @media (max-width: 600px) {
+            .eu-logo { height: 34px; }
+        }
+</style>
 </head>
-
 <body>
-  <main class="card">
-    <div class="top">
-      <div class="icon">€</div>
-      <h1>Currency Converter</h1>
-      <p class="subtitle" id="subtitle">EUR ↔ TRY/HUF • live rate</p>
+
+<header>
+  <a href="https://trakia-uni.bg/bg/" target="_blank" rel="noopener noreferrer">
+    <img src="logo TrU.jpeg" alt="Trakia University Logo" class="main-logo">
+  </a>
+
+  <div class="header-titles">
+    <h1>
+      Official Delegation from
+      <a href="https://trakia-uni.bg/bg/" target="_blank" rel="noopener noreferrer">
+        Trakia University – Stara Zagora
+      </a>
+    </h1>
+    <h1>Bulgaria</h1>
+  </div>
+</header>
+
+<section class="hero-banner">
+    <div class="hero-text">
+        <h2>Workshop: DIGI-MTVS 2026</h2>
+        <h1>Metaverse and Artificial Intelligence <br> for Collaborative and Immersive Learning in Higher Education</h1>
+    </div>
+</section>
+
+<div class="container">
+    <h2 style="color: var(--navy); border-bottom: 2px solid var(--primary-red); padding-bottom: 10px;">Key Institutional Representatives</h2>
+    
+    <div class="leadership-grid">
+        <div class="profile-card">
+            <img src="rector_photo.jpg" alt="Prof. Dr. Miroslav Karabaliev" class="profile-img">
+            <h3>Prof. Dr. Miroslav Karabaliev</h3>
+            <p><strong>Rector</strong><br>Trakia University – Stara Zagora<br><span style="font-size:0.9rem; opacity:0.9;">Chair of the Board of Project No. BG-RRP-2.004-006</span></p>
+            <div class="links">
+                <a href="https://scholar.google.com/citations?hl=en&user=U6o4CMYAAAAJ" target="_blank"> Google Scholar</a> | <a href="https://orcid.org/0000-0002-5608-2258" target="_blank">ORCID</a>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <img src="vice_rector_photo.jpg" alt="Assoc. Prof. Gabriela Kiryakova, PhD" class="profile-img">
+            <h3>Assoc. Prof. Gabriela Kiryakova, PhD</h3>
+            <p><strong>Vice-Rector</strong><br>Digitalization and International Affairs</p>
+            <div class="links">
+                <a href="https://scholar.google.com/citations?hl=en&user=zDgWbpEAAAAJ" target="_blank">Google Scholar</a> | <a href="https://orcid.org/0000-0002-2146-6331" target="_blank">ORCID</a>
+            </div>
+        </div>
     </div>
 
-    <div class="label">Foreign currency</div>
-    <div class="rowOne">
-      <select id="fxSelect" aria-label="Foreign currency">
-        <option value="TRY">TRY</option>
-        <option value="HUF">HUF</option>
-      </select>
-    </div>
+    <h2 style="color: var(--navy);">Workshop Contributors and Researchers</h2>
+    <table class="workshop-table">
+        <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Presenter & Topic</th>
+                <th>Position & Scientific Profiles</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="chair-row">
+                <td colspan="3">Chair: Neli Georgieva, Trakia University, Bulgaria</td>
+            </tr>
+            <tr>
+                <td><img src="vanya_photo.jpg" alt="Vanya Stoykova" class="table-photo"></td>
+                <td>
+                    <strong>Immersive (VR/3D) Teaching of the Physical Layer and Network Infrastructure</strong><br>
+                    Presenter: Prof.Eng. Vanya Stoykova, PhD
+                </td>
+                <td>
+                    Dean of Faculty of Engineering and Technology – Yambol
+                    <div class="links"><a href="https://scholar.google.com/citations?hl=en&user=PLamsFEAAAAJ" target="_blank">Google Scholar</a> | <a href="https://orcid.org/0000-0003-0940-3618" target="_blank">ORCID</a></div>
+                </td>
+            </tr>
+            <tr>
+                <td><img src="tanya_photo.jpg" alt="Tanya Pehlivanova" class="table-photo"></td>
+                <td>
+                    <strong>Generative Artificial Intelligence in Engineering Education: Role, Student Use Patterns, and Pedagogical Challenges</strong><br>
+                    Presenter: Prof.Eng. Tanya Pehlivanova, PhD
+                </td>
+                <td>
+                    Vice-Dean, Head of Dept. Electrical Engineering, Automation and Computer Systems
+                    <div class="links"><a href="https://scholar.google.com/citations?hl=en&user=e5KT3WoAAAAJ" target="_blank">Google Scholar</a> | <a href="#">ORCID</a></div>
+                </td>
+            </tr>
+            <tr>
+                <td><img src="georgi_photo.jpg" alt="Georgi Georgiev" class="table-photo"></td>
+                <td>
+                    <strong>Application of Virtual Reality in Teaching Computer-Aided Manufacturing (CAM) to Engineering Students</strong><br>
+                    Presenter: Assist.Prof.Eng. Georgi Georgiev, PhD
+                </td>
+                <td>
+                    Assist. Professor at Faculty of Engineering and Technology – Yambol
+                    <div class="links"><a href="#">Google Scholar</a> | <a href="#">ORCID</a></div>
+                </td>
+            </tr
+			<tr>
+                <td><img src="veselina_photo.jpg" alt="Veselina Nedeva" class="table-photo"></td>
+                <td>
+                    <strong>Integrating XR into Engineering and Programming Education: Platforms and Adaptation Strategies</strong><br>
+                    Presenter: Assoc.Prof. Veselina Nedeva, PhD
+                </td>
+                <td>
+                    Associate Professor in Computer Science, Experienced Researcher
+                    <div class="links"><a href="https://scholar.google.com/citations?user=Mi6U3joAAAAJ&hl=en" target="_blank">Google Scholar</a> | <a href="https://orcid.org/0000-0002-4082-1896" target="_blank">ORCID</a></div>
+                </td>
+            </tr>
 
-    <div class="label">Amount</div>
-    <div class="row">
-      <input id="amount" inputmode="decimal" placeholder="0.00" />
-      <div class="select" role="group" aria-label="From currency">
-        <button id="fromEUR" class="active" type="button">EUR</button>
-        <button id="fromFX" type="button">TRY</button>
-      </div>
-    </div>
+            <tr class="chair-row">
+                <td colspan="3">Chair: Veselina Nedeva, Trakia University, Bulgaria</td>
+            </tr>
+            
+            <tr>
+                <td><img src="snezhana_photo.jpg" alt="Snezhana Dineva" class="table-photo"></td>
+                <td>
+                    <strong>The Transformative and Challenging Role of AI in University Education</strong><br>
+                    Presenter: Prof. Snezhana Dineva, PhD
+                </td>
+                <td>
+                    Professor in Food Technology and Ecology - Faculty of Engineering and Technology – Yambol
+                    <div class="links"><a href="https://scholar.google.com/citations?hl=en&user=UnEmMhEAAAAJ" target="_blank">Google Scholar</a> | <a href="https://orcid.org/0000-0002-4655-6640" target="_blank">ORCID</a></div>
+                </td>
+            </tr>
+            <tr>
+                <td><img src="apostol_photo.jpg" alt="Apostol Todorov" class="table-photo"></td>
+                <td>
+                    <strong>Using a Virtual CAVE in Computer Networking Training</strong><br>
+                    Presenter: Assist.Prof.Eng. Apostol Todorov, PhD student
+                </td>
+                <td>
+                    Assist. Professor at Faculty of Engineering and Technology – Yambol
+                    <div class="links"><a href="https://scholar.google.com/citations?hl=en&user=DzKYxuQAAAAJ" target="_blank">Google Scholar</a> | <a href="https://orcid.org/0000-0002-4568-4894" target="_blank">ORCID</a></div>
+                </td>
+            </tr>
+            <tr>
+                
+				<td><img src="neli_photo.jpg" alt="Neli Georgieva" class="table-photo"></td>
+                <td>
+                    <strong>Investigation of the Possibilities for Using Immersive Technologies in the Study of Thermal-Energy Processes</strong><br>
+                    Presenter: Assoc.Prof.Eng. Neli Georgieva, PhD
+                </td>
+				<td>
+                    Head of the Department Energetics
+                    <div class="links"><a href="#">Google Scholar</a> | <a href="https://orcid.org/0000-0001-5903-0691" target="_blank">ORCID</a></div>
+                </td>
+                
+            </tr>
+			<tr>
+                
+				<td><img src="andrian_photo.jpg" alt="Andrian Minchev" class="table-photo"></td>
+                <td>
+                    <strong>Investigation of the Possibilities for Using Immersive Technologies in the Study of Thermal-Energy Processes</strong><br>
+                    Presenter: Assist.Prof.Eng. Andrian Minchev, PhD Student
+                </td>
+				<td>
+                    Assist. Professor at Faculty of Engineering and Technology – Yambol
+                    <div class="links"><a href="https://scholar.google.com/citations?hl=en&user=VzUGv0IAAAAJ" target="_blank">Google Scholar</a> | <a href="https://orcid.org/0000-0001-7331-0331" target="_blank">ORCID</a></div>
+                </td>
+                
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-    <div class="label">Convert to</div>
-    <div class="row">
-      <div id="result" class="outBox">—</div>
-      <div class="select" role="group" aria-label="To currency">
-        <button id="toEUR" type="button">EUR</button>
-        <button id="toFX" class="active" type="button">TRY</button>
-      </div>
-    </div>
+<footer>
+    <p><strong>Organised by Trakia University—Stara Zagora, Bulgaria</strong></p>
+    <p style="font-size: 0.85rem; max-width: 800px; margin: 10px auto; opacity: 0.9;">
+        Funded by Project № BG-RRP-2.004-006: "Development of scientific research and innovations at Trakia University in service of health and sustainable well-being"
+    </p>
+    <p style="font-size: 0.8rem; opacity: 0.7;">Implementation Period: 01.01.2023 – 30.06.2026</p>
+    <img src="NextGenerationEU_footer.png" alt="Funded by the European Union – NextGenerationEU" class="eu-logo">
+</footer>
 
-    <div class="divider"></div>
-
-    <div class="smallRow">
-      <span id="status">Loading rate…</span>
-      <div class="btnRow">
-        <button class="btn" id="swapBtn" type="button">Swap</button>
-        <button class="btn" id="refreshBtn" type="button">Refresh rate</button>
-        <button class="btn" id="resetBtn" type="button">Reset</button>
-      </div>
-    </div>
-
-    <div class="rate" id="rateLine">Rate: loading…</div>
-  </main>
-
-  <script>
-    const $ = (id) => document.getElementById(id);
-
-    let fxCur   = "TRY";
-    let fromCur = "EUR";
-    let toCur   = fxCur;
-
-    // rate: FX per 1 EUR (FX = TRY or HUF)
-    let rateFXperEUR = NaN;
-    let rateDate = null;
-
-    function parseNumber(raw){
-      if(!raw) return NaN;
-      const s = String(raw).trim().replace(/\s+/g,'').replace(',', '.');
-      if(!/^[+-]?\d*(\.\d*)?$/.test(s)) return NaN;
-      return Number(s);
-    }
-
-    function fmt(n){
-      if(!isFinite(n)) return "—";
-      return new Intl.NumberFormat("en-GB", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(n);
-    }
-
-    function updateSubtitle(){
-      $("subtitle").textContent = `EUR ↔ ${fxCur} • live rate`;
-    }
-
-    function setSelect(){
-      $("fromEUR").classList.toggle("active", fromCur === "EUR");
-      $("fromFX").classList.toggle("active", fromCur !== "EUR");
-      $("toEUR").classList.toggle("active", toCur === "EUR");
-      $("toFX").classList.toggle("active", toCur !== "EUR");
-
-      $("fromFX").textContent = fxCur;
-      $("toFX").textContent   = fxCur;
-    }
-
-    function convert(amount){
-      if(!isFinite(rateFXperEUR) || rateFXperEUR <= 0) return NaN;
-      if(!isFinite(amount)) return NaN;
-
-      if(fromCur === toCur) return amount;
-
-      // Only two currencies at any time: EUR and FX (TRY or HUF)
-      if(fromCur === "EUR" && toCur === fxCur) return amount * rateFXperEUR;
-      if(fromCur === fxCur && toCur === "EUR") return amount / rateFXperEUR;
-
-      return NaN;
-    }
-
-    function recalc(){
-      const amount = parseNumber($("amount").value);
-
-      if(!isFinite(rateFXperEUR)){
-        $("result").textContent = "—";
-        $("status").textContent = "Rate unavailable. Tap Refresh rate.";
-        return;
-      }
-
-      if(!isFinite(amount)){
-        $("result").textContent = "—";
-        $("status").textContent = "Enter an amount to convert.";
-        return;
-      }
-
-      $("result").textContent = fmt(convert(amount));
-      $("status").textContent = "Converted using today’s rate.";
-    }
-
-    async function fetchRate(){
-      const url = `https://api.frankfurter.app/latest?from=EUR&to=${fxCur}`;
-      const res = await fetch(url, { cache: "no-store" });
-      if(!res.ok) throw new Error("Rate fetch failed");
-      const data = await res.json();
-      const r = data?.rates?.[fxCur];
-      if(!(typeof r === "number" && isFinite(r) && r > 0)) throw new Error("Bad rate");
-      rateFXperEUR = r;
-      rateDate = data?.date || null;
-      updateRateLine();
-      recalc();
-    }
-
-    function updateRateLine(){
-      if(!isFinite(rateFXperEUR)){
-        $("rateLine").textContent = "Rate: unavailable.";
-        return;
-      }
-      const inv = 1 / rateFXperEUR;
-      $("rateLine").textContent =
-        `Rate: 1 EUR = ${rateFXperEUR.toFixed(5)} ${fxCur}` +
-        (rateDate ? ` (date: ${rateDate})` : "") +
-        ` • 1 ${fxCur} = ${inv.toFixed(5)} EUR`;
-    }
-
-    function swap(){
-      const tmp = fromCur;
-      fromCur = toCur;
-      toCur = tmp;
-      setSelect();
-      recalc();
-    }
-
-    function resetAll(){
-      $("amount").value = "";
-      fromCur = "EUR";
-      toCur = fxCur;
-      setSelect();
-      updateSubtitle();
-      $("result").textContent = "—";
-      $("status").textContent = isFinite(rateFXperEUR) ? "Enter an amount to convert." : "Loading rate…";
-    }
-
-    function onFxChange(){
-      fxCur = $("fxSelect").value;
-
-      // If the old FX was selected as from/to, keep "FX" selected but update to new currency code
-      if(fromCur !== "EUR") fromCur = fxCur;
-      if(toCur   !== "EUR") toCur   = fxCur;
-
-      setSelect();
-      updateSubtitle();
-
-      $("status").textContent = "Refreshing rate…";
-      fetchRate().catch(() => {
-        rateFXperEUR = NaN;
-        updateRateLine();
-        recalc();
-      });
-    }
-
-    $("amount").addEventListener("input", recalc);
-
-    $("fromEUR").addEventListener("click", () => { fromCur="EUR"; setSelect(); recalc(); });
-    $("fromFX").addEventListener("click", () => { fromCur=fxCur; setSelect(); recalc(); });
-
-    $("toEUR").addEventListener("click", () => { toCur="EUR"; setSelect(); recalc(); });
-    $("toFX").addEventListener("click", () => { toCur=fxCur; setSelect(); recalc(); });
-
-    $("swapBtn").addEventListener("click", swap);
-
-    $("refreshBtn").addEventListener("click", async () => {
-      $("status").textContent = "Refreshing rate…";
-      try { await fetchRate(); }
-      catch(e){
-        rateFXperEUR = NaN;
-        updateRateLine();
-        recalc();
-      }
-    });
-
-    $("resetBtn").addEventListener("click", resetAll);
-
-    $("fxSelect").addEventListener("change", onFxChange);
-
-    // init
-    resetAll();
-    (async () => {
-      try { await fetchRate(); }
-      catch(e){
-        rateFXperEUR = NaN;
-        updateRateLine();
-        recalc();
-      }
-    })();
-  </script>
 </body>
 </html>
