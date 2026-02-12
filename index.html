@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Currency Converter (EUR/TRY/HUF)</title>
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0f7a4a">
+  <meta name="apple-mobile-web-app-title" content="EUR↔FX">
+
+  <style>
+    :root{
+      /* Green theme */
+      --bgA:#16a34a;  /* green */
+      --bgB:#0ea5a4;  /* teal */
+      --bgC:#22c55e;  /* bright green */
+      --card:rgba(255,255,255,.92);
+
+      --text:#071a12;
+      --muted:#4b6b5a;
+      --line:rgba(7,26,18,.12);
+
+      --accent1:#22c55e;
+      --accent2:#0ea5a4;
+      --accent3:#34d399;
+
+      --shadow: 0 30px 75px rgba(0,0,0,.22);
+      --radius: 24px;
+      --fieldRadius: 16px;
+      --toggleRadius: 16px;
+
+      --focus: 0 0 0 4px rgba(34,197,94,.18);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+
+      background:
+        radial-gradient(1100px 650px at 12% 20%, rgba(52, 211, 153, .45), transparent 55%),
+        radial-gradient(900px 600px at 85% 28%, rgba(34, 197, 94, .35), transparent 55%),
+        radial-gradient(900px 600px at 55% 95%, rgba(14, 165, 164, .35), transparent 60%),
+        linear-gradient(135deg, var(--bgA), var(--bgB));
+
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 26px 14px;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-40%;
+      background: conic-gradient(from 180deg, rgba(255,255,255,.08), transparent 35%, rgba(255,255,255,.06), transparent 70%, rgba(255,255,255,.08));
+      filter: blur(24px);
+      animation: spin 18s linear infinite;
+      pointer-events:none;
+      opacity:.5;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .card{
+      width: min(760px, 100%);
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 30px 26px 22px;
+      border: 1px solid rgba(255,255,255,.55);
+      backdrop-filter: blur(10px);
+    }
+
+    .top{
+      text-align:center;
+      margin-bottom: 18px;
+    }
+
+    .icon{
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 10px;
+      border-radius: 999px;
+      background:
+        radial-gradient(16px 16px at 30% 25%, rgba(255,255,255,.9), transparent 60%),
+        linear-gradient(135deg, var(--accent3), var(--accent2), var(--accent1));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-size: 34px;
+      font-weight: 900;
+      user-select:none;
+      box-shadow: 0 14px 32px rgba(0,0,0,.16);
+    }
+
+    h1{
+      margin: 6px 0 4px;
+      font-size: clamp(26px, 3.2vw, 38px);
+      letter-spacing: .2px;
+    }
+
+    .subtitle{
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .label{
+      font-size: 18px;
+      margin: 18px 0 10px;
+      font-weight: 750;
+      letter-spacing: .1px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items:center;
+    }
+
+    .rowOne{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items:center;
+    }
+
+    input, select{
+      width: 100%;
+      font-size: 32px;
+      padding: 18px 18px;
+      border-radius: var(--fieldRadius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.88);
+      outline: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
+      font-variant-numeric: tabular-nums;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    select{
+      font-size: 20px;
+      font-weight: 800;
+      padding-right: 44px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(7,26,18,.55) 50%),
+        linear-gradient(135deg, rgba(7,26,18,.55) 50%, transparent 50%);
+      background-position:
+        calc(100% - 22px) 50%,
+        calc(100% - 16px) 50%;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+    input:focus, select:focus{
+      border-color: rgba(34,197,94,.45);
+      box-shadow: var(--focus), inset 0 0 0 1px rgba(255,255,255,.55);
+    }
+    input::placeholder{ color: rgba(75,107,90,.55); }
+
+    .select{
+      display:flex;
+      border-radius: var(--toggleRadius);
+      overflow:hidden;
+      border: 1px solid rgba(15,122,74,.25);
+      background: linear-gradient(135deg, rgba(52,211,153,.92), rgba(14,165,164,.90), rgba(34,197,94,.88));
+      padding: 4px;
+      gap: 4px;
+      min-width: 150px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+    }
+    .select button{
+      flex:1;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 10px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor:pointer;
+      background: transparent;
+      color: rgba(255,255,255,.92);
+    }
+    .select button.active{
+      background: rgba(255,255,255,.95);
+      color: #071a12;
+      box-shadow: 0 8px 18px rgba(0,0,0,.10);
+    }
+
+    .divider{
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(7,26,18,.14), transparent);
+      margin: 22px 0;
+    }
+
+    .outBox{
+      width: 100%;
+      border-radius: var(--fieldRadius);
+      padding: 18px 18px;
+      font-size: 34px;
+      font-weight: 950;
+      border: 1px solid rgba(7,26,18,.10);
+      background:
+        radial-gradient(18px 18px at 15% 20%, rgba(255,255,255,.95), transparent 60%),
+        rgba(255,255,255,.88);
+      font-variant-numeric: tabular-nums;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.55);
+    }
+
+    .smallRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 12px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .btnRow{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+    .btn{
+      border: 1px solid rgba(7,26,18,.12);
+      background:
+        radial-gradient(14px 14px at 20% 25%, rgba(255,255,255,.9), transparent 60%),
+        linear-gradient(135deg, rgba(52,211,153,.16), rgba(14,165,164,.12));
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 800;
+      color: rgba(7,26,18,.82);
+      box-shadow: 0 10px 20px rgba(0,0,0,.08);
+      user-select:none;
+      white-space:nowrap;
+    }
+
+    .rate{
+      text-align:center;
+      margin-top: 16px;
+      color: rgba(75,107,90,.95);
+      font-size: 15px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(7,26,18,.10);
+    }
+
+    @media (max-width: 520px){
+      .select{ min-width: 136px; }
+      input{ font-size: 30px; }
+      .outBox{ font-size: 32px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <div class="top">
+      <div class="icon">€</div>
+      <h1>Currency Converter</h1>
+      <p class="subtitle" id="subtitle">EUR ↔ TRY/HUF • live rate</p>
+    </div>
+
+    <div class="label">Foreign currency</div>
+    <div class="rowOne">
+      <select id="fxSelect" aria-label="Foreign currency">
+        <option value="TRY">TRY</option>
+        <option value="HUF">HUF</option>
+      </select>
+    </div>
+
+    <div class="label">Amount</div>
+    <div class="row">
+      <input id="amount" inputmode="decimal" placeholder="0.00" />
+      <div class="select" role="group" aria-label="From currency">
+        <button id="fromEUR" class="active" type="button">EUR</button>
+        <button id="fromFX" type="button">TRY</button>
+      </div>
+    </div>
+
+    <div class="label">Convert to</div>
+    <div class="row">
+      <div id="result" class="outBox">—</div>
+      <div class="select" role="group" aria-label="To currency">
+        <button id="toEUR" type="button">EUR</button>
+        <button id="toFX" class="active" type="button">TRY</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="smallRow">
+      <span id="status">Loading rate…</span>
+      <div class="btnRow">
+        <button class="btn" id="swapBtn" type="button">Swap</button>
+        <button class="btn" id="refreshBtn" type="button">Refresh rate</button>
+        <button class="btn" id="resetBtn" type="button">Reset</button>
+      </div>
+    </div>
+
+    <div class="rate" id="rateLine">Rate: loading…</div>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    let fxCur   = "TRY";
+    let fromCur = "EUR";
+    let toCur   = fxCur;
+
+    // rate: FX per 1 EUR (FX = TRY or HUF)
+    let rateFXperEUR = NaN;
+    let rateDate = null;
+
+    function parseNumber(raw){
+      if(!raw) return NaN;
+      const s = String(raw).trim().replace(/\s+/g,'').replace(',', '.');
+      if(!/^[+-]?\d*(\.\d*)?$/.test(s)) return NaN;
+      return Number(s);
+    }
+
+    function fmt(n){
+      if(!isFinite(n)) return "—";
+      return new Intl.NumberFormat("en-GB", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(n);
+    }
+
+    function updateSubtitle(){
+      $("subtitle").textContent = `EUR ↔ ${fxCur} • live rate`;
+    }
+
+    function setSelect(){
+      $("fromEUR").classList.toggle("active", fromCur === "EUR");
+      $("fromFX").classList.toggle("active", fromCur !== "EUR");
+      $("toEUR").classList.toggle("active", toCur === "EUR");
+      $("toFX").classList.toggle("active", toCur !== "EUR");
+
+      $("fromFX").textContent = fxCur;
+      $("toFX").textContent   = fxCur;
+    }
+
+    function convert(amount){
+      if(!isFinite(rateFXperEUR) || rateFXperEUR <= 0) return NaN;
+      if(!isFinite(amount)) return NaN;
+
+      if(fromCur === toCur) return amount;
+
+      // Only two currencies at any time: EUR and FX (TRY or HUF)
+      if(fromCur === "EUR" && toCur === fxCur) return amount * rateFXperEUR;
+      if(fromCur === fxCur && toCur === "EUR") return amount / rateFXperEUR;
+
+      return NaN;
+    }
+
+    function recalc(){
+      const amount = parseNumber($("amount").value);
+
+      if(!isFinite(rateFXperEUR)){
+        $("result").textContent = "—";
+        $("status").textContent = "Rate unavailable. Tap Refresh rate.";
+        return;
+      }
+
+      if(!isFinite(amount)){
+        $("result").textContent = "—";
+        $("status").textContent = "Enter an amount to convert.";
+        return;
+      }
+
+      $("result").textContent = fmt(convert(amount));
+      $("status").textContent = "Converted using today’s rate.";
+    }
+
+    async function fetchRate(){
+      const url = `https://api.frankfurter.app/latest?from=EUR&to=${fxCur}`;
+      const res = await fetch(url, { cache: "no-store" });
+      if(!res.ok) throw new Error("Rate fetch failed");
+      const data = await res.json();
+      const r = data?.rates?.[fxCur];
+      if(!(typeof r === "number" && isFinite(r) && r > 0)) throw new Error("Bad rate");
+      rateFXperEUR = r;
+      rateDate = data?.date || null;
+      updateRateLine();
+      recalc();
+    }
+
+    function updateRateLine(){
+      if(!isFinite(rateFXperEUR)){
+        $("rateLine").textContent = "Rate: unavailable.";
+        return;
+      }
+      const inv = 1 / rateFXperEUR;
+      $("rateLine").textContent =
+        `Rate: 1 EUR = ${rateFXperEUR.toFixed(5)} ${fxCur}` +
+        (rateDate ? ` (date: ${rateDate})` : "") +
+        ` • 1 ${fxCur} = ${inv.toFixed(5)} EUR`;
+    }
+
+    function swap(){
+      const tmp = fromCur;
+      fromCur = toCur;
+      toCur = tmp;
+      setSelect();
+      recalc();
+    }
+
+    function resetAll(){
+      $("amount").value = "";
+      fromCur = "EUR";
+      toCur = fxCur;
+      setSelect();
+      updateSubtitle();
+      $("result").textContent = "—";
+      $("status").textContent = isFinite(rateFXperEUR) ? "Enter an amount to convert." : "Loading rate…";
+    }
+
+    function onFxChange(){
+      fxCur = $("fxSelect").value;
+
+      // If the old FX was selected as from/to, keep "FX" selected but update to new currency code
+      if(fromCur !== "EUR") fromCur = fxCur;
+      if(toCur   !== "EUR") toCur   = fxCur;
+
+      setSelect();
+      updateSubtitle();
+
+      $("status").textContent = "Refreshing rate…";
+      fetchRate().catch(() => {
+        rateFXperEUR = NaN;
+        updateRateLine();
+        recalc();
+      });
+    }
+
+    $("amount").addEventListener("input", recalc);
+
+    $("fromEUR").addEventListener("click", () => { fromCur="EUR"; setSelect(); recalc(); });
+    $("fromFX").addEventListener("click", () => { fromCur=fxCur; setSelect(); recalc(); });
+
+    $("toEUR").addEventListener("click", () => { toCur="EUR"; setSelect(); recalc(); });
+    $("toFX").addEventListener("click", () => { toCur=fxCur; setSelect(); recalc(); });
+
+    $("swapBtn").addEventListener("click", swap);
+
+    $("refreshBtn").addEventListener("click", async () => {
+      $("status").textContent = "Refreshing rate…";
+      try { await fetchRate(); }
+      catch(e){
+        rateFXperEUR = NaN;
+        updateRateLine();
+        recalc();
+      }
+    });
+
+    $("resetBtn").addEventListener("click", resetAll);
+
+    $("fxSelect").addEventListener("change", onFxChange);
+
+    // init
+    resetAll();
+    (async () => {
+      try { await fetchRate(); }
+      catch(e){
+        rateFXperEUR = NaN;
+        updateRateLine();
+        recalc();
+      }
+    })();
+  </script>
+</body>
+</html>
